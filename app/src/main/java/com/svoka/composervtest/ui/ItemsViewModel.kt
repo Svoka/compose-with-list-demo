@@ -1,9 +1,9 @@
 package com.svoka.composervtest.ui
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.svoka.composervtest.Item
 import com.svoka.composervtest.ItemsState
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -23,7 +23,7 @@ class ItemsViewModel : ViewModel() {
         for (i in 1..1000) {
             add(Item("$i", "Test$i"))
         }
-    }
+    }.toPersistentList()
 
     private val _uiState = MutableStateFlow(ItemsState(list))
 
@@ -33,11 +33,11 @@ class ItemsViewModel : ViewModel() {
 
     init {
         scope.launch {
-            tickerFlow(5.toDuration(DurationUnit.SECONDS)).collect{
-                val l = _uiState.value.items.toMutableList()
+            tickerFlow(5.toDuration(DurationUnit.SECONDS)).collect {
+                val l = _uiState.value.items.toPersistentList()
                 if (l.isNotEmpty()) {
-                    l.removeLast()
-                    _uiState.emit(ItemsState(l))
+                    val newList = l.removeAt(l.lastIndex)
+                    _uiState.emit(ItemsState(newList))
                 }
             }
         }
