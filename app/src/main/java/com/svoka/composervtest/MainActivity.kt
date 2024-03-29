@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.svoka.composervtest.ui.ItemsViewModel
 import com.svoka.composervtest.ui.theme.ComposeRvTestTheme
+import kotlinx.collections.immutable.ImmutableList
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,7 +54,7 @@ fun Items(state: ItemsState) {
 }
 
 data class ItemsState(
-    val items: List<Item>
+    val items: ImmutableList<Item>
 )
 
 data class Item(
